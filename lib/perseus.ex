@@ -20,12 +20,6 @@ defmodule Perseus do
 
   """
   def get_meta(path) do
-    IO.puts("Path: #{path}")
-
-    with {:ok, file} = File.open(path) do
-      <<length::integer-32, atom_type::binary-4>> = IO.binread(file, 8)
-      IO.puts("length: #{length} atom: #{atom_type}")
-      IO.puts(inspect(FTyp.parse_ftyp(file, length)))
-    end
+    Parser.parse(path)
   end
 end
