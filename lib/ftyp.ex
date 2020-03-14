@@ -15,10 +15,12 @@ defmodule FTyp do
       loop(file, [compatible_brand | l], i - 4)
     end
   end
+end
 
-  def parse_ftyp(file, size) do
+defimpl Box, for: FTyp do
+  def parse(_, file, size) do
     <<major_brand::binary-4, minor_version::integer-32>> = IO.binread(file, 8)
-    brands = Loop.loop(file, [], size - 16)
+    brands = FTyp.Loop.loop(file, [], size - 16)
     %FTyp{major_brand: major_brand, minor_version: minor_version, compatible_brands: brands}
   end
 end
