@@ -1,5 +1,8 @@
 defmodule Mvhd do
-  defstruct data: nil
+  defstruct(
+    name: :mvhd,
+    data: nil
+  )
 end
 
 defimpl Box, for: Mvhd do

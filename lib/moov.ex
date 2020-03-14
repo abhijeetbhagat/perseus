@@ -27,12 +27,13 @@ defmodule Moov do
 
           type ->
             IO.puts("Invalid atom type #{type} found during parsing")
+            throw(atom_type)
         end
 
       box = Box.parse(box, file, length)
       IO.puts(inspect(box))
 
-      loop(IO.binread(file, 8), file, cnt + length, size, Map.update(moov, atom_type, box, & &1))
+      loop(IO.binread(file, 8), file, cnt + length, size, moov |> Map.put(box.name, box))
     end
 
     def loop(:eof, _, _, _, moov) do

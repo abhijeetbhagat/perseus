@@ -1,5 +1,8 @@
 defmodule Iods do
-  defstruct data: nil
+  defstruct(
+    name: :iods,
+    data: nil
+  )
 end
 
 defimpl Box, for: Iods do

@@ -1,5 +1,8 @@
 defmodule Trak do
-  defstruct data: nil
+  defstruct(
+    name: :trak,
+    data: nil
+  )
 end
 
 defimpl Box, for: Trak do
