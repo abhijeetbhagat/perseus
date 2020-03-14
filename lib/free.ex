@@ -1,5 +1,8 @@
 defmodule Free do
-  defstruct(data: nil)
+  defstruct(
+    name: :free,
+    data: nil
+  )
 end
 
 defimpl Box, for: Free do

@@ -1,5 +1,6 @@
 defmodule Moov do
   defstruct(
+    name: :moov,
     mvhd: nil,
     trak: nil,
     iods: nil,
