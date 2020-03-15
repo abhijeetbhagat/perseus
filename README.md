@@ -1,6 +1,6 @@
 # Perseus
 
-**TODO: Add description**
+An ISO-BMFF file parser.
 
 ## Installation
 
