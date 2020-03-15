@@ -48,10 +48,10 @@ defimpl Box, for: Elst do
     loop(
       v,
       rest,
-      [sd_l | segment_duration],
-      [mt_l | media_time],
-      [mri_l | media_rate_integer],
-      [mrf_l | media_rate_fraction],
+      sd_l ++ [segment_duration],
+      mt_l ++ [media_time],
+      mri_l ++ [media_rate_integer],
+      mrf_l ++ [media_rate_fraction],
       cnt + 1,
       entry_count
     )
@@ -77,35 +77,24 @@ defimpl Box, for: Elst do
     loop(
       1,
       rest,
-      [sd_l | segment_duration],
-      [mt_l | media_time],
-      [mri_l | media_rate_integer],
-      [mrf_l | media_rate_fraction],
+      sd_l ++ [segment_duration],
+      mt_l ++ [media_time],
+      mri_l ++ [media_rate_integer],
+      mrf_l ++ [media_rate_fraction],
       cnt + 1,
       entry_count
     )
   end
 
-  def loop(_, sd_l, mt_l, mri_l, mrf_l, _, _) do
-    {
-      sd_l,
-      mt_l,
-      mri_l,
-      mrf_l
-    }
+  def loop(_, _, sd_l, mt_l, mri_l, mrf_l, _, entry_count) do
+    {entry_count, sd_l, mt_l, mri_l, mrf_l}
   end
 
   def extract_meta(<<version::integer-32, entry_count::integer-32, rest::binary>>) do
-    {
-      entry_count,
-      loop(version, rest, [], [], [], [], 0, entry_count)
-    }
+    loop(version, rest, [], [], [], [], 0, entry_count)
   end
 
   def extract_meta(<<1::integer-32, entry_count::integer-32, rest::binary>>) do
-    {
-      entry_count,
-      loop(1, rest, [], [], [], [], 0, entry_count)
-    }
+    loop(1, rest, [], [], [], [], 0, entry_count)
   end
 end

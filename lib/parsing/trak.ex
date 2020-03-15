@@ -7,7 +7,11 @@ defmodule Trak do
   defmodule Loop do
     def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, moov)
         when cnt < size do
-      IO.puts("cnt: #{cnt}, size: #{size}, length: #{length}")
+      IO.puts(
+        "tkhd: cnt: #{cnt}, size: #{size}, length: #{length} pos: #{
+          elem(:file.position(file, :cur), 1)
+        }"
+      )
 
       box =
         case atom_type do
@@ -52,7 +56,8 @@ end
 
 defimpl Box, for: Trak do
   def parse(_, file, size) do
-    :file.position(file, {:cur, size})
-    %Trak{}
+    # :file.position(file, {:cur, size})
+    # %Trak{}
+    Trak.Loop.loop(IO.binread(file, 8), file, 0, size, %Trak{})
   end
 end

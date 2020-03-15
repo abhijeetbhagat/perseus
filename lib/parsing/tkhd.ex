@@ -5,7 +5,8 @@ defmodule Tkhd do
     modification_time: 0,
     timescale: 0,
     duration: 0,
-    next_track_id: 0,
+    reserved1: 0,
+    track_id: 0,
     reserved2: [],
     reserved3: 0,
     layer: 0,
@@ -17,58 +18,111 @@ defmodule Tkhd do
 end
 
 defimpl Box, for: Tkhd do
-  def parse(_, file, _) do
-    <<version::integer-8, flags::integer-32>> = IO.binread(file, 4)
+  def parse(_, file, size) do
+    {
+      creation_time,
+      modification_time,
+      track_id,
+      reserved1,
+      duration,
+      reserved2,
+      layer,
+      alternate_group,
+      volume,
+      reserved3,
+      width,
+      height
+    } = extract_meta(IO.binread(file, size))
 
-    tkhd = %Tkhd{}
+    %Tkhd{
+      creation_time: creation_time,
+      modification_time: modification_time,
+      track_id: track_id,
+      reserved1: reserved1,
+      duration: duration,
+      reserved2: reserved2,
+      layer: layer,
+      alternate_group: alternate_group,
+      volume: volume,
+      reserved3: reserved3,
+      width: width,
+      height: height
+    }
+  end
 
-    tkhd =
-      if version == 0 do
-        <<creation_time::integer-32, modification_time::integer-32, track_id::integer-32,
-          reserved1::integer-32, duration::integer-32>> = IO.binread(file, 20)
+  defp extract_meta(<<0::integer-8, rest::binary>>) do
+    IO.puts("tkhd: rest size: #{byte_size(rest)}")
 
-        tkhd
-        |> Map.put(:creation_time, creation_time)
-        |> Map.put(:modification_time, modification_time)
-        |> Map.put(:track_id, track_id)
-        |> Map.put(:reserved1, reserved1)
-        |> Map.put(:duration, duration)
-      else
-        <<creation_time::integer-64, modification_time::integer-64, track_id::integer-32,
-          reserved1::integer-32, duration::integer-64>> = IO.binread(file, 32)
+    <<
+      _::binary-size(3),
+      creation_time::integer-32,
+      modification_time::integer-32,
+      track_id::integer-32,
+      reserved1::integer-32,
+      duration::integer-32,
+      reserved2_1::integer-32,
+      reserved2_2::integer-32,
+      layer::integer-16,
+      alternate_group::integer-16,
+      volume::integer-16,
+      reserved3::integer-16,
+      _::binary-size(36),
+      width::integer-16,
+      _::binary-size(2),
+      height::integer-16,
+      _::binary-size(2)
+    >> = rest
 
-        tkhd
-        |> Map.put(:creation_time, creation_time)
-        |> Map.put(:modification_time, modification_time)
-        |> Map.put(:track_id, track_id)
-        |> Map.put(:reserved1, reserved1)
-        |> Map.put(:duration, duration)
-      end
+    {
+      creation_time,
+      modification_time,
+      track_id,
+      reserved1,
+      duration,
+      [reserved2_1, reserved2_2],
+      layer,
+      alternate_group,
+      volume,
+      reserved3,
+      width,
+      height
+    }
+  end
 
-    # extract two 4 bytes ints from the file and store them in a list
-    reserved_bytes = for <<reserved::integer-32 <- IO.binread(file, 16)>>, do: reserved
+  defp extract_meta(<<_version::integer-8, rest::binary>>) do
+    <<
+      _::binary-size(3),
+      creation_time::integer-64,
+      modification_time::integer-64,
+      track_id::integer-32,
+      reserved1::integer-32,
+      duration::integer-64,
+      reserved2_1::integer-32,
+      reserved2_2::integer-32,
+      layer::integer-16,
+      alternate_group::integer-16,
+      volume::integer-16,
+      reserved3::integer-16,
+      _::binary-size(36),
+      width::integer-16,
+      _::binary-size(16),
+      height::integer-16,
+      _::binary-size(16)
+    >> = rest
 
-    <<layer::integer-16, alternate_group::integer-16, volume::integer-16, reserved3::integer-16>> =
-      IO.binread(file, 8)
-
-    # if track is audio, then set volume to 1 else 0
-    # for now, set it to 0 until we figure how to check the track type
-    :file.position(file, {:cur, 36})
-    # TODO abhi - width and height values are stored as fixed point 16.16 values
-    # not sure how to convert that to float at this point in time. But reading
-    # the first 16 bits and treating them as a value does the job.
-    <<width::integer-16>> = IO.binread(file, 2)
-    :file.position(file, {:cur, 2})
-    <<height::integer-16>> = IO.binread(file, 2)
-    :file.position(file, {:cur, 2})
-
-    tkhd
-    |> Map.put(:reserved2, reserved_bytes)
-    |> Map.put(:layer, layer)
-    |> Map.put(:alternate_group, alternate_group)
-    |> Map.put(:volume, volume)
-    |> Map.put(:reserved3, reserved3)
-    |> Map.put(:width, width)
-    |> Map.put(:height, height)
+    {
+      creation_time,
+      modification_time,
+      track_id,
+      reserved1,
+      duration,
+      [reserved2_1, reserved2_2],
+      layer,
+      alternate_group,
+      volume,
+      reserved3,
+      width,
+      height
+    }
   end
 end

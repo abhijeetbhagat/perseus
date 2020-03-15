@@ -19,7 +19,7 @@ defmodule Edts do
             throw(atom_type)
         end
 
-      box = Box.parse(box, file, length)
+      box = Box.parse(box, file, length - 8)
       IO.puts(inspect(box))
 
       loop(IO.binread(file, 8), file, cnt + length, size, edts |> Map.put(box.name, box))
