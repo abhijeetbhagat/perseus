@@ -13,24 +13,21 @@ defmodule Mdia do
 
       box =
         case atom_type do
-          "iods" ->
-            %Iods{}
+          "mdhd" ->
+            %Mdhd{}
 
-          "udta" ->
-            %Udta{}
+          "hdlr" ->
+            %Hdlr{}
 
-          "mvhd" ->
-            %Mvhd{}
-
-          "trak" ->
-            %Trak{}
+          "minf" ->
+            %Minf{}
 
           type ->
             IO.puts("Invalid atom type #{type} found during parsing")
             throw(atom_type)
         end
 
-      box = Box.parse(box, file, length)
+      box = Box.parse(box, file, length - 8)
       IO.puts(inspect(box))
 
       loop(IO.binread(file, 8), file, cnt + length, size, moov |> Map.put(box.name, box))
