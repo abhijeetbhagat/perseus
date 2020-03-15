@@ -7,7 +7,7 @@ end
 
 defimpl Box, for: Free do
   def parse(_, file, size) do
-    :file.position(file, {:cur, size - 8})
+    :file.position(file, {:cur, size})
     %Free{}
   end
 end

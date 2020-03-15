@@ -1,10 +1,9 @@
-defmodule Moov do
+defmodule Mdia do
   defstruct(
-    name: :moov,
-    mvhd: nil,
-    trak: nil,
-    iods: nil,
-    udta: nil
+    name: :mdia,
+    mdhd: nil,
+    hdlr: nil,
+    minf: nil
   )
 
   defmodule Loop do
@@ -53,8 +52,8 @@ defmodule Moov do
   end
 end
 
-defimpl Box, for: Moov do
+defimpl Box, for: Mdia do
   def parse(_moov, file, size) do
-    Moov.Loop.loop(IO.binread(file, 8), file, 8, size, %Moov{})
+    Mdia.Loop.loop(IO.binread(file, 8), file, 8, size, %Mdia{})
   end
 end

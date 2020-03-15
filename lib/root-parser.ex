@@ -23,7 +23,7 @@ defmodule Parser do
 
       box = Box.parse(box, file, length)
       IO.puts(inspect(box))
-      IO.puts("cur pos: #{elem(:file.position(file, :cur), 1)}")
+      IO.puts("root-parse: cur pos: #{elem(:file.position(file, :cur), 1)}")
 
       loop(IO.binread(file, 8), file, [box | boxes])
     end
