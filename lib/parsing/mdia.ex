@@ -7,7 +7,7 @@ defmodule Mdia do
   )
 
   defmodule Loop do
-    def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, moov)
+    def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, mdia)
         when cnt < size do
       IO.puts("cnt: #{cnt}, size: #{size}, length: #{length}")
 
@@ -30,17 +30,17 @@ defmodule Mdia do
       box = Box.parse(box, file, length - 8)
       IO.puts(inspect(box))
 
-      loop(IO.binread(file, 8), file, cnt + length, size, moov |> Map.put(box.name, box))
+      loop(IO.binread(file, 8), file, cnt + length, size, mdia |> Map.put(box.name, box))
     end
 
-    def loop(:eof, _, _, _, moov) do
-      moov
+    def loop(:eof, _, _, _, mdia) do
+      mdia
     end
 
-    def loop(<<_::integer-32, _::binary-4>>, file, _, _, moov) do
+    def loop(<<_::integer-32, _::binary-4>>, file, _, _, mdia) do
       # because the current pos is past next atom's length and name
       :file.position(file, {:cur, -8})
-      moov
+      mdia
     end
 
     def loop({:error, reason}, _, _, _, _) do
@@ -50,7 +50,7 @@ defmodule Mdia do
 end
 
 defimpl Box, for: Mdia do
-  def parse(_moov, file, size) do
+  def parse(_mdia, file, size) do
     Mdia.Loop.loop(IO.binread(file, 8), file, 8, size, %Mdia{})
   end
 end
