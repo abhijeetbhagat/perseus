@@ -5,7 +5,7 @@ defmodule Trak do
   )
 
   defmodule Loop do
-    def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, moov)
+    def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, trak)
         when cnt < size do
       IO.puts(
         "tkhd: cnt: #{cnt}, size: #{size}, length: #{length} pos: #{
@@ -35,17 +35,17 @@ defmodule Trak do
       box = Box.parse(box, file, length - 8)
       IO.puts(inspect(box))
 
-      loop(IO.binread(file, 8), file, cnt + length, size, moov |> Map.put(box.name, box))
+      loop(IO.binread(file, 8), file, cnt + length, size, trak |> Map.put(box.name, box))
     end
 
-    def loop(:eof, _, _, _, moov) do
-      moov
+    def loop(:eof, _, _, _, trak) do
+      trak
     end
 
-    def loop(<<_::integer-32, _::binary-4>>, file, _, _, moov) do
+    def loop(<<_::integer-32, _::binary-4>>, file, _, _, trak) do
       # because the current pos is past next atom's length and name
       :file.position(file, {:cur, -8})
-      moov
+      trak
     end
 
     def loop({:error, reason}, _, _, _, _) do
