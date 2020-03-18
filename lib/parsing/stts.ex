@@ -7,12 +7,11 @@ defmodule Stts do
   )
 
   defmodule Loop do
-    def loop(<<sc::integer-32, sd::integer-32, rest::binary>>, cnt, size, sc_l, sd_l)
-        when cnt < size do
-      loop(rest, cnt + 1, size, sc_l ++ [sc], sd_l ++ [sd])
+    def loop(<<sc::integer-32, sd::integer-32, rest::binary>>, sc_l, sd_l) do
+      loop(rest, sc_l ++ [sc], sd_l ++ [sd])
     end
 
-    def loop(_rest, _, _, sc_l, sd_l) do
+    def loop(<<>>, sc_l, sd_l) do
       {sc_l, sd_l}
     end
   end
@@ -26,7 +25,7 @@ defimpl Box, for: Stts do
       rest::binary
     >> = IO.binread(file, size)
 
-    {sc_l, sd_l} = Stts.Loop.loop(rest, 0, entry_count, [], [])
+    {sc_l, sd_l} = Stts.Loop.loop(rest, [], [])
 
     %Stts{
       entry_count: entry_count,
