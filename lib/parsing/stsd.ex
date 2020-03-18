@@ -49,6 +49,6 @@ end
 defimpl Box, for: Stsd do
   def parse(_, file, size) do
     <<_version::integer-32, entry_count::integer-32>> = IO.binread(file, 8)
-    Stsd.Loop.loop(IO.binread(file, 8), file, 0, size - 4, %Stsd{entry_count: entry_count})
+    Stsd.Loop.loop(IO.binread(file, 8), file, 0, size - 8, %Stsd{entry_count: entry_count})
   end
 end

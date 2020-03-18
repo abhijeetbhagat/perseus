@@ -82,8 +82,7 @@ defimpl Box, for: Avc1 do
     <<
       _::binary-size(s),
       vid_pixel_depth::integer-16,
-      vid_color_tbl_id::integer-16,
-      rest::binary
+      vid_color_tbl_id::integer-16
     >> = rest
 
     avc1 = %Avc1{
