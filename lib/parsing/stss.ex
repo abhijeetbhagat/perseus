@@ -24,7 +24,7 @@ defimpl Box, for: Stss do
       rest::binary
     >> = IO.binread(file, size)
 
-    sn_l = Stss.Loop.loop(rest, [])
+    sn_l = for <<i::integer-32 <- rest>>, do: i
 
     %Stss{
       entry_count: entry_count,
