@@ -4,16 +4,6 @@ defmodule Stss do
     entry_count: 0,
     sample_number: []
   )
-
-  defmodule Loop do
-    def loop(<<sn::integer-32, rest::binary>>, sn_l) do
-      loop(rest, sn_l ++ [sn])
-    end
-
-    def loop(<<>>, sn_l) do
-      sn_l
-    end
-  end
 end
 
 defimpl Box, for: Stss do
