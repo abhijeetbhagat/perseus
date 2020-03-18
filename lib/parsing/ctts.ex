@@ -5,16 +5,6 @@ defmodule Ctts do
     sample_count: [],
     sample_offset: []
   )
-
-  defmodule Loop do
-    def loop(<<sc::integer-32, so::integer-32, rest::binary>>, sc_l, so_l) do
-      loop(rest, sc_l ++ [sc], so_l ++ [so])
-    end
-
-    def loop(<<>>, sc_l, so_l) do
-      {sc_l, so_l}
-    end
-  end
 end
 
 defimpl Box, for: Ctts do
@@ -25,7 +15,25 @@ defimpl Box, for: Ctts do
       rest::binary
     >> = IO.binread(file, size)
 
-    {sc_l, so_l} = Ctts.Loop.loop(rest, [], [])
+    # TODO abhi: the sc and so lists were populated using recursion earlier
+    # but i used reduce to make it idiomatic? At what cost i am not sure.
+    {sc_l, so_l} =
+      Enum.reduce(
+        Enum.zip(
+          1..entry_count,
+          for <<i::integer-32 <- rest>> do
+            i
+          end
+        ),
+        {[], []},
+        fn x, {a, b} ->
+          if rem(elem(x, 0), 2) == 1 do
+            {a ++ [elem(x, 1)], b}
+          else
+            {a, b ++ [elem(x, 1)]}
+          end
+        end
+      )
 
     %Ctts{
       entry_count: entry_count,
