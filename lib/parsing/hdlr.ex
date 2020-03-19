@@ -1,3 +1,4 @@
+require Logger
 defmodule Hdlr do
   defstruct(
     name: :hdlr,

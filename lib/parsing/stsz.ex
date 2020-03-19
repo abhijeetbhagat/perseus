@@ -1,3 +1,4 @@
+require Logger
 defmodule Stsz do
   defstruct(
     name: :stts,

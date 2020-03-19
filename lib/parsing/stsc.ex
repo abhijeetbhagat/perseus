@@ -1,3 +1,4 @@
+require Logger
 defmodule Stsc do
   defstruct(
     name: :stsc,

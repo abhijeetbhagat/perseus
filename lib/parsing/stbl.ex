@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Stbl do
   defstruct(
     name: :stbl,
@@ -13,7 +15,7 @@ defmodule Stbl do
   defmodule Loop do
     def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, stbl)
         when cnt < size do
-      IO.puts("cnt: #{cnt}, size: #{size}, length: #{length}")
+      Logger.debug("cnt: #{cnt}, size: #{size}, length: #{length}")
 
       box =
         case atom_type do
@@ -39,12 +41,12 @@ defmodule Stbl do
             %Stco{}
 
           type ->
-            IO.puts("Invalid atom type #{type} found during parsing")
+            Logger.debug("Invalid atom type #{type} found during parsing")
             throw(atom_type)
         end
 
       box = Box.parse(box, file, length - 8)
-      IO.puts(inspect(box))
+      Logger.debug(inspect(box))
 
       loop(IO.binread(file, 8), file, cnt + length, size, stbl |> Map.put(box.name, box))
     end
@@ -60,7 +62,7 @@ defmodule Stbl do
     end
 
     def loop({:error, reason}, _, _, _, _) do
-      IO.puts("Error occurred while reading file #{reason}")
+      Logger.debug("Error occurred while reading file #{reason}")
     end
   end
 end

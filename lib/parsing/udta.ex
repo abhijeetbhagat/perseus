@@ -1,3 +1,4 @@
+require Logger
 defmodule Udta do
   defstruct(
     name: :udta,

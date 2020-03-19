@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Moov do
   defstruct(
     name: :moov,
@@ -10,7 +12,7 @@ defmodule Moov do
   defmodule Loop do
     def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, moov)
         when cnt < size do
-      IO.puts(
+      Logger.debug(
         "moov: cnt: #{cnt}, size: #{size}, length: #{length} cur pos: #{
           elem(:file.position(file, :cur), 1)
         }"
@@ -31,13 +33,13 @@ defmodule Moov do
             %Trak{}
 
           type ->
-            IO.puts("Invalid atom type #{type} found during parsing")
+            Logger.debug("Invalid atom type #{type} found during parsing")
             throw(atom_type)
         end
 
-      IO.puts("moov: about to parse #{atom_type}")
+      Logger.debug("moov: about to parse #{atom_type}")
       box = Box.parse(box, file, length - 8)
-      IO.puts(inspect(box))
+      Logger.debug(inspect(box))
 
       loop(IO.binread(file, 8), file, cnt + length, size, moov |> Map.put(box.name, box))
     end
@@ -53,7 +55,7 @@ defmodule Moov do
     end
 
     def loop({:error, reason}, _, _, _, _) do
-      IO.puts("Error occurred while reading file #{reason}")
+      Logger.debug("Error occurred while reading file #{reason}")
     end
   end
 end

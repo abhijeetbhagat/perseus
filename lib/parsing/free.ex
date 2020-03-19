@@ -1,3 +1,4 @@
+require Logger
 defmodule Free do
   defstruct(
     name: :free,

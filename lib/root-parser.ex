@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Parser do
   defstruct(boxes: [])
 
@@ -18,12 +20,12 @@ defmodule Parser do
             %Mdat{}
 
           type ->
-            IO.puts("Invalid atom type #{type} found during parsing")
+            Logger.debug("Invalid atom type #{type} found during parsing")
         end
 
       box = Box.parse(box, file, length)
-      IO.puts(inspect(box))
-      IO.puts("root-parse: cur pos: #{elem(:file.position(file, :cur), 1)}")
+      Logger.debug(inspect(box))
+      Logger.debug("root-parse: cur pos: #{elem(:file.position(file, :cur), 1)}")
 
       loop(IO.binread(file, 8), file, [box | boxes])
     end
@@ -33,12 +35,12 @@ defmodule Parser do
     end
 
     def loop({:error, reason}, _, _) do
-      IO.puts("Error occurred while reading file #{reason}")
+      Logger.debug("Error occurred while reading file #{reason}")
     end
   end
 
   def parse(path) do
-    IO.puts("Path: #{path}")
+    Logger.debug("Path: #{path}")
 
     with {:ok, file} = File.open(path) do
       boxes = Parser.Loop.loop(IO.binread(file, 8), file, [])

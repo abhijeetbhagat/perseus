@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Ctts do
   defstruct(
     name: :ctts,
@@ -43,7 +45,7 @@ defimpl Box, for: Ctts do
         end
       )
 
-    # IO.puts("time: #{sc_l} μs")
+    # Logger.debug("time: #{sc_l} μs")
     # TODO abhi: the sc and so lists were populated using recursion earlier
     # but i used reduce to make it idiomatic? At what cost i am not sure.
     _ = """

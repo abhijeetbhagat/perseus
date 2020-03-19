@@ -1,3 +1,4 @@
+require Logger
 defmodule Btrt do
   defstruct(
     name: :btrt,

@@ -1,3 +1,4 @@
+require Logger
 defmodule Iods do
   defstruct(
     name: :iods,

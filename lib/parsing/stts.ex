@@ -1,3 +1,4 @@
+require Logger
 defmodule Stts do
   defstruct(
     name: :stts,

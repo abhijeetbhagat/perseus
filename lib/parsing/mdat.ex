@@ -1,3 +1,4 @@
+require Logger
 defmodule Mdat do
   defstruct(data: nil)
 end

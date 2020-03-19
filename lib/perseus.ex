@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Perseus do
   @moduledoc """
   Documentation for `Perseus`.
@@ -20,6 +22,7 @@ defmodule Perseus do
 
   """
   def get_meta(path) do
-    Parser.parse(path)
+    {time, result} = :timer.tc(fn -> Parser.parse(path) end)
+    Logger.info("parse time: #{time} µs")
   end
 end

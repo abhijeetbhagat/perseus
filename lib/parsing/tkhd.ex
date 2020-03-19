@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Tkhd do
   defstruct(
     name: :tkhd,
@@ -51,7 +53,7 @@ defimpl Box, for: Tkhd do
   end
 
   defp extract_meta(<<0::integer-8, rest::binary>>) do
-    IO.puts("tkhd: rest size: #{byte_size(rest)}")
+    Logger.debug("tkhd: rest size: #{byte_size(rest)}")
 
     <<
       _::binary-size(3),

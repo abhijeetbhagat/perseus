@@ -1,3 +1,4 @@
+require Logger
 defmodule FTyp do
   defstruct(
     major_brand: "",

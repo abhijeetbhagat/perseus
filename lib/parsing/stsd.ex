@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Stsd do
   defstruct(
     name: :stsd,
@@ -9,7 +11,7 @@ defmodule Stsd do
   defmodule Loop do
     def loop(<<length::integer-32, atom_type::binary-4>>, file, cnt, size, stsd)
         when cnt < size do
-      IO.puts("stsd: cnt: #{cnt}, size: #{size}, length: #{length}")
+      Logger.debug("stsd: cnt: #{cnt}, size: #{size}, length: #{length}")
 
       box =
         case atom_type do
@@ -20,12 +22,12 @@ defmodule Stsd do
             %Mp4a{}
 
           type ->
-            IO.puts("Invalid atom type #{type} found during parsing")
+            Logger.debug("Invalid atom type #{type} found during parsing")
             throw(atom_type)
         end
 
       box = Box.parse(box, file, length - 8)
-      IO.puts(inspect(box))
+      Logger.debug(inspect(box))
 
       loop(IO.binread(file, 8), file, cnt + length, size, stsd |> Map.put(box.name, box))
     end
@@ -41,7 +43,7 @@ defmodule Stsd do
     end
 
     def loop({:error, reason}, _, _, _, _) do
-      IO.puts("Error occurred while reading file #{reason}")
+      Logger.debug("Error occurred while reading file #{reason}")
     end
   end
 end

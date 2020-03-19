@@ -1,3 +1,4 @@
+require Logger
 defmodule Pasp do
   defstruct(
     name: :pasp,

@@ -1,3 +1,4 @@
+require Logger
 defmodule Elst do
   defstruct(
     name: :elst,

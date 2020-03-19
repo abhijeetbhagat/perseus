@@ -1,3 +1,4 @@
+require Logger
 defmodule Colr do
   defstruct(
     name: :colr,

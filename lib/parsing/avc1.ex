@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Avc1 do
   defstruct(
     name: :avc1,
@@ -35,7 +37,7 @@ defmodule Avc1 do
             %Pasp{}
 
           type ->
-            IO.puts("avc1: Invalid atom type #{type} found during parsing")
+            Logger.debug("avc1: Invalid atom type #{type} found during parsing")
         end
 
       box = Box.parse(box, file, length - 8)
@@ -53,7 +55,7 @@ defmodule Avc1 do
     end
 
     def loop({:error, reason}, _, _, _, _) do
-      IO.puts("Error occurred while reading file #{reason}")
+      Logger.debug("Error occurred while reading file #{reason}")
     end
   end
 end
@@ -102,8 +104,8 @@ defimpl Box, for: Avc1 do
       vid_color_tbl_id: vid_color_tbl_id
     }
 
-    IO.puts(inspect(avc1))
-    IO.puts("avc1: pos after avc1 parsing: #{elem(:file.position(file, :cur), 1)}")
+    Logger.debug(inspect(avc1))
+    Logger.debug("avc1: pos after avc1 parsing: #{elem(:file.position(file, :cur), 1)}")
 
     Avc1.Loop.loop(IO.binread(file, 8), file, 86 + 8, size, avc1)
   end

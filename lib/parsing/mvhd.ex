@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Mvhd do
   defstruct(
     name: :mvhd,
@@ -11,7 +13,7 @@ end
 
 defimpl Box, for: Mvhd do
   def parse(_, file, size) do
-    IO.puts("mvhd: size: #{size} pos: #{elem(:file.position(file, :cur), 1)}")
+    Logger.debug("mvhd: size: #{size} pos: #{elem(:file.position(file, :cur), 1)}")
 
     {
       creation_time,

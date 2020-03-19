@@ -1,3 +1,4 @@
+require Logger
 defmodule Dinf do
   defstruct(
     name: :dinf,

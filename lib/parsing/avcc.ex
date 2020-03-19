@@ -1,3 +1,4 @@
+require Logger
 use Bitwise
 
 defmodule Avcc do

@@ -1,3 +1,4 @@
+require Logger
 use Bitwise
 
 defmodule Mdhd do
@@ -15,7 +16,7 @@ end
 
 defimpl Box, for: Mdhd do
   def parse(_, file, size) do
-    IO.puts("mdhd: size: #{size} pos: #{elem(:file.position(file, :cur), 1)}")
+    Logger.debug("mdhd: size: #{size} pos: #{elem(:file.position(file, :cur), 1)}")
 
     {
       creation_time,

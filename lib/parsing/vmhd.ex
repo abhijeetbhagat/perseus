@@ -1,3 +1,4 @@
+require Logger
 defmodule Vmhd do
   defstruct(
     name: :vmhd,
