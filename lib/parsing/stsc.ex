@@ -1,4 +1,5 @@
 require Logger
+
 defmodule Stsc do
   defstruct(
     name: :stsc,
@@ -7,21 +8,6 @@ defmodule Stsc do
     samples_per_chunk: [],
     sample_desc_index: []
   )
-
-  defmodule Loop do
-    def loop(
-          <<fc::integer-32, spc::integer-32, sdi::integer-32, rest::binary>>,
-          fc_l,
-          spc_l,
-          sdi_l
-        ) do
-      loop(rest, fc_l ++ [fc], spc_l ++ [spc], sdi_l ++ [sdi])
-    end
-
-    def loop(<<>>, fc_l, spc_l, sdi_l) do
-      {fc_l, spc_l, sdi_l}
-    end
-  end
 end
 
 defimpl Box, for: Stsc do
@@ -32,7 +18,23 @@ defimpl Box, for: Stsc do
       rest::binary
     >> = IO.binread(file, size)
 
-    {fc_l, spc_l, sdi_l} = Stsc.Loop.loop(rest, [], [], [])
+    {fc_l, spc_l, sdi_l} =
+      Enum.reduce(
+        Enum.zip(
+          Stream.cycle([1, 2, 3]),
+          for <<i::integer-32 <- rest>> do
+            i
+          end
+        ),
+        {[], [], []},
+        fn x, {a, b, c} ->
+          case elem(x, 0) do
+            1 -> {a ++ [elem(x, 1)], b, c}
+            2 -> {a, b ++ [elem(x, 1)], c}
+            3 -> {a, b, c ++ [elem(x, 1)]}
+          end
+        end
+      )
 
     %Stsc{
       entry_count: entry_count,
