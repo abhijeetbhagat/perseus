@@ -1,4 +1,5 @@
 require Logger
+
 defmodule Stts do
   defstruct(
     name: :stts,
@@ -26,7 +27,22 @@ defimpl Box, for: Stts do
       rest::binary
     >> = IO.binread(file, size)
 
-    {sc_l, sd_l} = Stts.Loop.loop(rest, [], [])
+    {sc_l, sd_l} =
+      Enum.reduce(
+        Enum.zip(
+          Stream.cycle([1, 2]),
+          for <<i::integer-32 <- rest>> do
+            i
+          end
+        ),
+        {[], []},
+        fn x, {a, b} ->
+          case elem(x, 0) do
+            1 -> {a ++ [elem(x, 1)], b}
+            2 -> {a, b ++ [elem(x, 1)]}
+          end
+        end
+      )
 
     %Stts{
       entry_count: entry_count,
