@@ -20,17 +20,16 @@ defimpl Box, for: Ctts do
     {sc_l, so_l} =
       Enum.reduce(
         Enum.zip(
-          1..entry_count,
+          Stream.cycle([1, 2]),
           for <<i::integer-32 <- rest>> do
             i
           end
         ),
         {[], []},
         fn x, {a, b} ->
-          if rem(elem(x, 0), 2) == 1 do
-            {a ++ [elem(x, 1)], b}
-          else
-            {a, b ++ [elem(x, 1)]}
+          case elem(x, 0) do
+            1 -> {a ++ [elem(x, 1)], b}
+            2 -> {a, b ++ [elem(x, 1)]}
           end
         end
       )
