@@ -26,26 +26,24 @@ defimpl Box, for: Ctts do
     >> = IO.binread(file, size)
 
     {sc_l, so_l} =
-      :timer.tc(fn ->
-        Enum.reduce(
-          Enum.zip(
-            1..entry_count,
-            for <<i::integer-32 <- rest>> do
-              i
-            end
-          ),
-          {[], []},
-          fn x, {a, b} ->
-            if rem(elem(x, 0), 2) == 1 do
-              {a ++ [elem(x, 1)], b}
-            else
-              {a, b ++ [elem(x, 1)]}
-            end
+      Enum.reduce(
+        Enum.zip(
+          1..entry_count,
+          for <<i::integer-32 <- rest>> do
+            i
           end
-        )
-      end)
+        ),
+        {[], []},
+        fn x, {a, b} ->
+          if rem(elem(x, 0), 2) == 1 do
+            {a ++ [elem(x, 1)], b}
+          else
+            {a, b ++ [elem(x, 1)]}
+          end
+        end
+      )
 
-    IO.puts("time: #{sc_l} μs")
+    # IO.puts("time: #{sc_l} μs")
     # TODO abhi: the sc and so lists were populated using recursion earlier
     # but i used reduce to make it idiomatic? At what cost i am not sure.
     _ = """
