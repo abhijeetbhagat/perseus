@@ -1,6 +1,6 @@
 require Logger
 
-defmodule Parser do
+defmodule Perseus.Parser do
   defstruct(boxes: [])
 
   defp loop(<<length::integer-32, atom_type::binary-4>>, file, boxes) do
@@ -19,7 +19,7 @@ defmodule Parser do
           %Perseus.Boxes.Mdat{}
 
         type ->
-          Logger.debug("Invalid atom type #{type} found during parsing")
+          %Perseus.Boxes.Unknown{name: String.to_atom(type)}
       end
 
     box = Perseus.Box.parse(box, file, length - 8)

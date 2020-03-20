@@ -40,7 +40,8 @@ defimpl Perseus.Box, for: Perseus.Boxes.Avc1 do
           %Perseus.Boxes.Pasp{}
 
         type ->
-          Logger.debug("avc1: Invalid atom type #{type} found during parsing")
+          %Perseus.Boxes.Unknown{name: String.to_atom(type)}
+
       end
 
     box = Perseus.Box.parse(box, file, length - 8)

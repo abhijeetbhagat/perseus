@@ -36,8 +36,8 @@ defimpl Perseus.Box, for: Moov do
           %Perseus.Boxes.Trak{}
 
         type ->
-          Logger.debug("Invalid atom type #{type} found during parsing")
-          throw(atom_type)
+          %Perseus.Boxes.Unknown{name: String.to_atom(type)}
+
       end
 
     Logger.debug("moov: about to parse #{atom_type}")

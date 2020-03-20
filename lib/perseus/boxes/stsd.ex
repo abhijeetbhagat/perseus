@@ -22,11 +22,11 @@ defimpl Perseus.Box, for: Stsd do
           %Perseus.Boxes.Avc1{}
 
         "mp4a" ->
-          %Mp4a{}
+          %Perseus.Boxes.Mp4a{}
 
         type ->
-          Logger.debug("Invalid atom type #{type} found during parsing")
-          throw(atom_type)
+          %Perseus.Boxes.Unknown{name: String.to_atom(type)}
+
       end
 
     box = Perseus.Box.parse(box, file, length - 8)

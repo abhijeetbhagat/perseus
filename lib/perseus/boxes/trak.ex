@@ -35,8 +35,8 @@ defimpl Perseus.Box, for: Trak do
           %Perseus.Boxes.Udta{}
 
         type ->
-          Logger.debug("Invalid atom type #{type} found during parsing")
-          throw(atom_type)
+          %Perseus.Boxes.Unknown{name: String.to_atom(type)}
+
       end
 
     box = Perseus.Box.parse(box, file, length - 8)

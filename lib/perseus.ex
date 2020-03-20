@@ -9,9 +9,9 @@ defmodule Perseus do
   @doc """
   returns a map containing box names and objects
 
-  ## Examples
+  ### Example
 
-      iex> Perseus.get_meta(~S(C:\Users\abhagat\code\mp4box\test\output_squirrel.mp4))
+      iex> Perseus.get_meta(~S(C:\\Users\\abhagat\\code\\mp4box\\test\\output_squirrel.mp4))
       %{
         free: %Perseus.Boxes.Free{
           data: "IsoMedia File Produced with GPAC 0.8.0-rev9-g6e4af05b-master",
@@ -28,8 +28,6 @@ defmodule Perseus do
 
   """
   def get_meta(path) do
-    {time, result} = :timer.tc(fn -> Parser.parse(path) end)
-    Logger.debug("parse time: #{time} µs")
-    result
+    Perseus.Parser.parse(path)
   end
 end
