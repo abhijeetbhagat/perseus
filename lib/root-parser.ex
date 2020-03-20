@@ -23,7 +23,7 @@ defmodule Parser do
             Logger.debug("Invalid atom type #{type} found during parsing")
         end
 
-      box = Box.parse(box, file, length)
+      box = Box.parse(box, file, length - 8)
       Logger.debug(inspect(box))
       Logger.debug("root-parse: cur pos: #{elem(:file.position(file, :cur), 1)}")
 

@@ -3,7 +3,9 @@ require Logger
 defmodule Trak do
   defstruct(
     name: :trak,
-    data: nil
+    tkhd: nil,
+    edts: nil,
+    mdia: nil
   )
 
   defmodule Loop do
