@@ -44,14 +44,14 @@ defmodule Avc1 do
       loop(IO.binread(file, 8), file, cnt + length, size, avc1 |> Map.put(box.name, box))
     end
 
-    def loop(:eof, _, _, _, mdia) do
-      mdia
+    def loop(:eof, _, _, _, avc1) do
+      avc1
     end
 
-    def loop(<<_::integer-32, _::binary-4>>, file, _, _, mdia) do
+    def loop(<<_::integer-32, _::binary-4>>, file, _, _, avc1) do
       # because the current pos is past next atom's length and name
       :file.position(file, {:cur, -8})
-      mdia
+      avc1
     end
 
     def loop({:error, reason}, _, _, _, _) do

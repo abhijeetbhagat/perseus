@@ -2,6 +2,7 @@ require Logger
 
 defmodule FTyp do
   defstruct(
+    name: :ftyp,
     major_brand: "",
     minor_version: 0,
     compatible_brands: []

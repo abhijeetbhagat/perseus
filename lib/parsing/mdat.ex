@@ -1,7 +1,7 @@
 require Logger
 
 defmodule Mdat do
-  defstruct(data: nil)
+  defstruct(name: :mdat, data: nil)
 end
 
 defimpl Box, for: Mdat do

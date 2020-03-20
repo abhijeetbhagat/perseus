@@ -27,7 +27,7 @@ defmodule Parser do
       Logger.debug(inspect(box))
       Logger.debug("root-parse: cur pos: #{elem(:file.position(file, :cur), 1)}")
 
-      loop(IO.binread(file, 8), file, [box | boxes])
+      loop(IO.binread(file, 8), file, boxes |> Map.put(box.name, box))
     end
 
     def loop(:eof, _, boxes) do
@@ -43,8 +43,8 @@ defmodule Parser do
     Logger.debug("Path: #{path}")
 
     with {:ok, file} = File.open(path) do
-      boxes = Parser.Loop.loop(IO.binread(file, 8), file, [])
-      %Parser{boxes: boxes}
+      boxes = Parser.Loop.loop(IO.binread(file, 8), file, %{})
+      boxes
     end
   end
 end

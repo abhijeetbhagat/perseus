@@ -5,13 +5,7 @@ defmodule Perseus do
   Documentation for `Perseus`.
   """
 
-  @spec get_meta(
-          binary
-          | maybe_improper_list(
-              binary | maybe_improper_list(any, binary | []) | char,
-              binary | []
-            )
-        ) :: :ok
+  @spec get_meta(binary) :: :ok
   @doc """
   Hello world.
 
@@ -23,6 +17,7 @@ defmodule Perseus do
   """
   def get_meta(path) do
     {time, result} = :timer.tc(fn -> Parser.parse(path) end)
-    Logger.info("parse time: #{time} µs")
+    Logger.debug("parse time: #{time} µs")
+    result
   end
 end
