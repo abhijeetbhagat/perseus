@@ -1,7 +1,14 @@
 require Logger
 
 defmodule Perseus.Parser do
-  defstruct(boxes: [])
+  @moduledoc """
+  The `Perseus.Parser` module represents an entry
+  point of the file parsing.
+  This is where the path is opened with `IO.binread()` and
+  parsing is kicked-off.
+  This in an internal module and should not be used directly.
+  Use the top-level `Perseus` module instead.
+  """
 
   defp loop(<<length::integer-32, atom_type::binary-4>>, file, boxes) do
     box =
