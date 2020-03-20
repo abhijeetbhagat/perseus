@@ -7,7 +7,27 @@ defmodule Perseus.MixProject do
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
+      description: description,
+      package: package,
       deps: deps()
+    ]
+  end
+
+  defp description() do
+    """
+    An ISO-BMFF file parsing library.
+    """
+  end
+
+  defp package() do
+    [
+      files: ["config", "lib", "mix.exs", "README.md"],
+      maintainers: ["abhi"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => "https://github.com/abhijeetbhagat/perseus",
+        "Docs" => "https://hexdocs.pm/perseus"
+      }
     ]
   end
 
