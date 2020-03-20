@@ -1,14 +1,15 @@
 require Logger
+
 defmodule Free do
   defstruct(
     name: :free,
-    data: nil
+    data: <<>>
   )
 end
 
 defimpl Box, for: Free do
   def parse(_, file, size) do
-    :file.position(file, {:cur, size})
-    %Free{}
+    <<data::binary>> = IO.binread(file, size)
+    %Free{data: binary_part(data, 0, byte_size(data) - 1)}
   end
 end
