@@ -16,28 +16,26 @@ defmodule Perseus.Boxes.Avcc do
     pps_len: [],
     pps_nalus: []
   )
-
-  defmodule Loop do
-    def loop(
-          <<len::integer-16, nalu::binary-size(len), rest::binary>>,
-          len_l,
-          nalu_l,
-          cnt,
-          size
-        )
-        when cnt < size do
-      loop(rest, len_l ++ [len], nalu_l ++ [nalu], cnt + 1, size)
-    end
-
-    def loop(rest, len_l, nalu_l, _, _) do
-      {rest, len_l, nalu_l}
-    end
-  end
 end
 
 alias Perseus.Boxes.Avcc
 
 defimpl Perseus.Box, for: Avcc do
+  def loop(
+        <<len::integer-16, nalu::binary-size(len), rest::binary>>,
+        len_l,
+        nalu_l,
+        cnt,
+        size
+      )
+      when cnt < size do
+    loop(rest, len_l ++ [len], nalu_l ++ [nalu], cnt + 1, size)
+  end
+
+  def loop(rest, len_l, nalu_l, _, _) do
+    {rest, len_l, nalu_l}
+  end
+
   def parse(_, file, size) do
     <<
       config_version::integer-8,
@@ -52,9 +50,9 @@ defimpl Perseus.Box, for: Avcc do
 
     <<num_sps::integer-8, rest::binary>> = rest
     num_sps = num_sps &&& 0x1F
-    {rest, sps_len_l, sps_nalu_l} = Avcc.Loop.loop(rest, [], [], 0, num_sps)
+    {rest, sps_len_l, sps_nalu_l} = loop(rest, [], [], 0, num_sps)
     <<num_pps::integer-8, rest::binary>> = rest
-    {_rest, pps_len_l, pps_nalu_l} = Avcc.Loop.loop(rest, [], [], 0, num_pps)
+    {_rest, pps_len_l, pps_nalu_l} = loop(rest, [], [], 0, num_pps)
 
     %Avcc{
       config_version: config_version,

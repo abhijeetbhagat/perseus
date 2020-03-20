@@ -1,5 +1,6 @@
 require Logger
-defmodule Mp4a do
+
+defmodule Perseus.Boxes.Mp4a do
   defstruct(
     name: :mp4a,
     data: nil

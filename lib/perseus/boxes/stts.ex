@@ -7,16 +7,6 @@ defmodule Perseus.Boxes.Stts do
     sample_count: [],
     sample_delta: []
   )
-
-  defmodule Loop do
-    def loop(<<sc::integer-32, sd::integer-32, rest::binary>>, sc_l, sd_l) do
-      loop(rest, sc_l ++ [sc], sd_l ++ [sd])
-    end
-
-    def loop(<<>>, sc_l, sd_l) do
-      {sc_l, sd_l}
-    end
-  end
 end
 
 alias Perseus.Boxes.Stts
