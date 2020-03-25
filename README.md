@@ -1,5 +1,5 @@
 # Perseus
-[![Hex.pm](https://img.shields.io/badge/hex-v0.1.0-orange)](https://hex.pm/packages/perseus)
+[![Hex.pm](https://img.shields.io/badge/hex-v0.1.1-orange)](https://hex.pm/packages/perseus)
 [![Hexdocs.pm](https://img.shields.io/badge/api-hexdocs-brightgreen)](https://hexdocs.pm/perseus)
 
 An ISO-BMFF file parser.
@@ -12,7 +12,7 @@ by adding `perseus` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:perseus, "~> 0.1.0"}
+    {:perseus, "~> 0.1.1"}
   ]
 end
 ```
