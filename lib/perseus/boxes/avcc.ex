@@ -55,10 +55,7 @@ defimpl Perseus.Box, for: Avcc do
     {rest, pps_len_l, pps_nalu_l} = loop(rest, [], [], 0, num_pps)
 
     avcc =
-      case profile_indication == 100 or
-             profile_indication == 110 or
-             profile_indication == 122 or
-             profile_indication == 144 do
+      case profile_indication do
         n when n in [100, 110, 122, 144] ->
           <<
             _::size(6),
